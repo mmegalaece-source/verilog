@@ -1,1 +1,68 @@
+1.Write the keystrokes needed for the commands in vi if the editor is currently in "Command" mode.
+a. Delete 4 lines, starting from the current line.
+Ans: 4dd
+b. Search "cat" or "Cat" in the entire document
+Ans: /[Cc]at
+c. Delete 6 characters, starting from the current position
+Ans: 6x
+d. Switch to "Insert" mode.
+Ans: i
+e. Undo the most recent command.
+Ans: u
 
+2.Briefly explain what the given command would do in vi if the editor is currently in command mode. (Hint:
+Go try these commands and verify what they do).
+a. :wq!
+Ans: :wq!
+b. :%s/cat/Cat/g
+Ans: :%s/cat/Cat/g
+c. 2fa
+Ans: 2fa
+d. yy (Hint: after doing this, go elsewhere in the file and do the command p)
+Ans: yy
+e. gg
+Ans: gg
+
+3.Write the keystrokes needed for these commands in editor VI. Assume that you want to accomplish
+each task with as few keystrokes as possible.
+a. Search backward
+Ans: ?
+b. Cut text from the "mark" to the current position
+Ans: d'm
+c. Move to the end of the line
+Ans: $
+d. Move forward one page
+Ans: cntl+f
+e. Save buffered text to currently specified file
+Ans: :w
+
+4.Briefly explain what each of the given commands would do in editor emacs. Note that the ^ symbol in
+these commands represents the Control key.
+a. :11,15s/Bangalore/Trivandrum/
+Ans: Replace first "Bangalore" with "Trivandrum" in lines 11–15.
+b. :11,15s/Bangalore/Trivandrum/gc
+Ans: Replace all "Bangalore" with "Trivandrum" in lines 11–15 with confirmation.
+c. :set nu
+Ans: Display line numbers.
+d. :q
+Ans: Quit vi editor (without unsaved changes).
+e. :q!
+Ans: Quit vi forcefully and discard changes.
+
+5.Give brief answers for each of the following questions. For questions a and b below, write out two
+different ways (using numerical and letter methods) to change permissions of a file "thing.txt" to the
+permissions specified.
+a. User has read, execute permissions, group has read permissions, other has write and
+execute permissions
+Ans: numerical method=chmod 543 thing.txt
+letter method=chmod u=rx,g=r,o=wx thing.txt
+b. User has no permissions, group has read write execute permissions, other has write
+permissions
+Ans: numerical method=chmod 072 thing.txt
+letter method= chmod u=,g=rwx,o=w thing.txt
+c. What are the default permissions of a newly created text file?
+Ans: -rw-r--r--
+d. What are the default permissions of a newly created directory? WHY does it differ from the
+permissions of a new text file? Name one command that would not produce the desired result
+when a directory that is not executable is used as a parameter to the command.
+Ans: drwxr-xr-x
