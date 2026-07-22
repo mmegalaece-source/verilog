@@ -7,61 +7,57 @@
 :vpi_module "/usr/lib/x86_64-linux-gnu/ivl/vhdl_textio.vpi";
 :vpi_module "/usr/lib/x86_64-linux-gnu/ivl/v2005_math.vpi";
 :vpi_module "/usr/lib/x86_64-linux-gnu/ivl/va_math.vpi";
-S_0x62789a437b40 .scope module, "sr_latch_d_tb" "sr_latch_d_tb" 2 1;
+S_0x5fa58dffdb80 .scope module, "sr_latch_g_tb" "sr_latch_g_tb" 2 1;
  .timescale 0 0;
-v0x62789a44ab60_0 .net "q", 0 0, L_0x62789a44b000;  1 drivers
-v0x62789a44ac20_0 .net "qbar", 0 0, L_0x62789a44b1d0;  1 drivers
-v0x62789a44acf0_0 .var "r", 0 0;
-v0x62789a44adf0_0 .var "s", 0 0;
-S_0x62789a437cd0 .scope module, "dut" "sr_latch_d" 2 4, 3 1 0, S_0x62789a437b40;
+v0x5fa58e00fcb0_0 .net "q", 0 0, L_0x5fa58e010010;  1 drivers
+v0x5fa58e00fd70_0 .net "qbar", 0 0, L_0x5fa58e010170;  1 drivers
+v0x5fa58e00fe40_0 .var "r", 0 0;
+v0x5fa58e00ff40_0 .var "s", 0 0;
+S_0x5fa58dffdd10 .scope module, "uut" "sr_latch_g" 2 4, 3 1 0, S_0x5fa58dffdb80;
  .timescale 0 0;
     .port_info 0 /INPUT 1 "s";
     .port_info 1 /INPUT 1 "r";
     .port_info 2 /OUTPUT 1 "q";
     .port_info 3 /OUTPUT 1 "qbar";
-L_0x62789a44aec0 .functor OR 1, v0x62789a44acf0_0, L_0x62789a44b1d0, C4<0>, C4<0>;
-L_0x62789a44b000 .functor NOT 1, L_0x62789a44aec0, C4<0>, C4<0>, C4<0>;
-L_0x62789a44b110 .functor OR 1, L_0x62789a44b000, v0x62789a44adf0_0, C4<0>, C4<0>;
-L_0x62789a44b1d0 .functor NOT 1, L_0x62789a44b110, C4<0>, C4<0>, C4<0>;
-v0x62789a426b10_0 .net *"_ivl_0", 0 0, L_0x62789a44aec0;  1 drivers
-v0x62789a44a6d0_0 .net *"_ivl_4", 0 0, L_0x62789a44b110;  1 drivers
-v0x62789a44a7b0_0 .net "q", 0 0, L_0x62789a44b000;  alias, 1 drivers
-v0x62789a44a850_0 .net "qbar", 0 0, L_0x62789a44b1d0;  alias, 1 drivers
-v0x62789a44a910_0 .net "r", 0 0, v0x62789a44acf0_0;  1 drivers
-v0x62789a44aa20_0 .net "s", 0 0, v0x62789a44adf0_0;  1 drivers
-    .scope S_0x62789a437b40;
+L_0x5fa58e010010 .functor NOR 1, v0x5fa58e00fe40_0, L_0x5fa58e010170, C4<0>, C4<0>;
+L_0x5fa58e010170 .functor NOR 1, L_0x5fa58e010010, v0x5fa58e00ff40_0, C4<0>, C4<0>;
+v0x5fa58dfebe10_0 .net "q", 0 0, L_0x5fa58e010010;  alias, 1 drivers
+v0x5fa58e00f9b0_0 .net "qbar", 0 0, L_0x5fa58e010170;  alias, 1 drivers
+v0x5fa58e00fa70_0 .net "r", 0 0, v0x5fa58e00fe40_0;  1 drivers
+v0x5fa58e00fb40_0 .net "s", 0 0, v0x5fa58e00ff40_0;  1 drivers
+    .scope S_0x5fa58dffdb80;
 T_0 ;
     %pushi/vec4 0, 0, 1;
-    %store/vec4 v0x62789a44adf0_0, 0, 1;
+    %store/vec4 v0x5fa58e00ff40_0, 0, 1;
     %pushi/vec4 0, 0, 1;
-    %store/vec4 v0x62789a44acf0_0, 0, 1;
+    %store/vec4 v0x5fa58e00fe40_0, 0, 1;
     %delay 10, 0;
     %pushi/vec4 0, 0, 1;
-    %store/vec4 v0x62789a44adf0_0, 0, 1;
+    %store/vec4 v0x5fa58e00ff40_0, 0, 1;
     %pushi/vec4 1, 0, 1;
-    %store/vec4 v0x62789a44acf0_0, 0, 1;
+    %store/vec4 v0x5fa58e00fe40_0, 0, 1;
     %delay 10, 0;
     %pushi/vec4 1, 0, 1;
-    %store/vec4 v0x62789a44adf0_0, 0, 1;
+    %store/vec4 v0x5fa58e00ff40_0, 0, 1;
     %pushi/vec4 0, 0, 1;
-    %store/vec4 v0x62789a44acf0_0, 0, 1;
+    %store/vec4 v0x5fa58e00fe40_0, 0, 1;
     %delay 10, 0;
     %pushi/vec4 1, 0, 1;
-    %store/vec4 v0x62789a44adf0_0, 0, 1;
+    %store/vec4 v0x5fa58e00ff40_0, 0, 1;
     %pushi/vec4 1, 0, 1;
-    %store/vec4 v0x62789a44acf0_0, 0, 1;
+    %store/vec4 v0x5fa58e00fe40_0, 0, 1;
     %delay 10, 0;
     %vpi_call 2 10 "$finish" {0 0 0};
     %end;
     .thread T_0;
-    .scope S_0x62789a437b40;
+    .scope S_0x5fa58dffdb80;
 T_1 ;
-    %vpi_call 2 13 "$monitor", "s=%b r=%b q=%b qbar=%b", v0x62789a44adf0_0, v0x62789a44acf0_0, v0x62789a44ab60_0, v0x62789a44ac20_0 {0 0 0};
+    %vpi_call 2 13 "$monitor", "s=%b r=%b q=%b qbar=%b", v0x5fa58e00ff40_0, v0x5fa58e00fe40_0, v0x5fa58e00fcb0_0, v0x5fa58e00fd70_0 {0 0 0};
     %end;
     .thread T_1;
 # The file index is used to find the file name in the following table.
 :file_names 4;
     "N/A";
     "<interactive>";
-    "sr_latch_d_tb.v";
-    "sr_latch_d.v";
+    "sr_latch_g_tb.v";
+    "sr_latch_g.v";
