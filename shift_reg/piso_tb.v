@@ -9,20 +9,23 @@ always #5 clk=~clk;
 initial begin
 clk=0;
 rst=1;
-load=0;
-pin=4'd0;
+load=0;pin=4'd2;
 #10;
+
 rst=0;
 load=1;
+pin=4'd6;
 #10;
-pin=4'd3;#10;
-pin=4'd4;#10;
 load=0;
-pin=4'd5;#10;
-pin=4'd6;#10;
+#80;
+load=1;
+pin=4'd7;
+#10;
+load=0;
+#80;
 $finish;
 end
 initial begin
-$monitor("clk=%d rst=%d pin=%d load=%d pout=%b",clk,rst,pin,load,pout);
+$monitor("clk=%b rst=%b pin=%b load=%b pout=%b",clk,rst,pin,load,pout);
 end
 endmodule
