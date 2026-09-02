@@ -1,4 +1,4 @@
-module fifo(
+/* module fifo(
 input clk,
 input rst,
 input wr_ena,
@@ -50,4 +50,42 @@ end
 end
 assign full=(count==8);
 assign empty=(count==0);
-endmodule 
+endmodule */ 
+
+
+module fifo_sync (input clk,
+	 input cs,
+	 input rst_n,
+	 input wr_en,
+	 input rd_en,
+	 input [7:0]data_in,
+	 output reg[7:0]data_out,
+	 output full,
+	 output empty);
+ reg [3:0]wr_p;
+ reg [3:0]rd_p;
+ reg [7:0]mem[7:0];
+ always@(posedge clk or negedge rst_n)begin
+	 if(!rst_n)begin
+		 wr_p<=4'b0000;
+	 end
+	 else if(cs && wr_en && !full)begin
+		 mem[wr_p[2:0]]<=data_in;
+		 wr_p<=wr_p + 1'b1;
+	 end
+ end
+ always@(posedge clk or negedge rst_n)begin
+	 if(!rst_n)begin
+		 rd_p<=4'b0000;
+		data_out<=8'b00000000;
+	end
+
+	 else if(cs && rd_en && !empty)begin
+			 data_out<=mem[rd_p[2:0]];
+			 rd_p<=rd_p + 1'b1;
+	 end
+ end
+	
+	 assign empty=(wr_p == rd_p);
+          assign full = (wr_p[2:0] == rd_p[2:0]) && (wr_p[3] != rd_p[3]);
+	  endmodule
