@@ -1,112 +1,89 @@
-`timescale 1ns/1ps
-
-module topmodule_tb;
-
+module uart_tb;
 reg clk;
-reg reset;
-
+reg rst;
+wire uart_rx;
+wire uart_tx;
+//transmitter
+reg [7:0] tx_data;
 reg tx_start;
-reg [7:0] tx_data_in;
-
-wire tx_pin;
-wire rx_pin;
+reg parity_en;
+reg parity_type;
 wire tx_busy;
-
-wire [7:0] rx_data_out;
+//receiver
+wire [7:0]rx_data;
 wire rx_valid;
+wire rx_error;
 
-
-//========================================
-// TX -> RX LOOPBACK
-//========================================
-
-assign rx_pin = tx_pin;
-
-
-//========================================
-// DUT
-//========================================
-
-topmodule #(
-    .CLK_FREQ  (50000000),
-    .BAUD_RATE (9600)
-) uut (
-    .clk         (clk),
-    .reset       (reset),
-
-    .tx_pin      (tx_pin),
-    .rx_pin      (rx_pin),
-
-    .tx_start    (tx_start),
-    .tx_data_in  (tx_data_in),
-    .tx_busy     (tx_busy),
-
-    .rx_data_out (rx_data_out),
-    .rx_valid    (rx_valid)
-);
-
-
-//========================================
-// 50 MHz CLOCK
-//========================================
-
-always #10 clk = ~clk;
-
-
-//========================================
-// TEST
-//========================================
+uart u1(.clk(clk),
+	.rst(rst),
+	.uart_tx(uart_tx),
+	.uart_rx(uart_rx),
+	.tx_data(tx_data),
+	.tx_start(tx_start),
+	.parity_en(parity_en),
+    .parity_type(parity_type),
+	.tx_busy(tx_busy),
+	.rx_data(rx_data),
+	.rx_valid(rx_valid),
+	.rx_error(rx_error));
+	
+initial begin
+	clk = 0;
+	forever #10clk = ~clk;
+end
+assign uart_rx = uart_tx;
 
 initial begin
+        rst = 1;
+        tx_data = 8'h48;
+        tx_start = 0;
+        parity_en = 1;
+        parity_type = 1;
+        #100;
 
-    $dumpfile("uart.vcd");
-    $dumpvars(0, topmodule_tb);
+        rst = 0;
+        #50;
+        tx_start = 1;
+        #50;
+        tx_start = 0;
+        #100000;
 
-    clk        = 1'b0;
-    reset      = 1'b0;
-    tx_start   = 1'b0;
-    tx_data_in = 8'h00;
+        tx_data = 8'h45;
+        tx_start = 1;
+        #50;
+        tx_start = 0;
+        #100000;
 
-    // Reset
-    #100;
-    reset = 1'b1;
+        tx_data = 8'h4C;
+        tx_start = 1;
+        #50;
+        tx_start = 0;
+        #100000;
 
-    #100;
+        tx_data = 8'h4C;
+        tx_start = 1;
+        #50;
+        tx_start = 0;
+        #100000;
 
-    //====================================
-    // SEND A5
-    //====================================
+        tx_data = 8'h4F;
+        tx_start = 1;
+        #50;
+        tx_start = 0;
+        #50;
 
-    tx_data_in = 8'hA5;
-    tx_start   = 1'b1;
+        #2000000;
 
-    #20;
-    tx_start   = 1'b0;
-
-    $display("TX Started");
-    $display("TX Data = %h", tx_data_in);
-
-
-    //====================================
-    // WAIT FOR RX VALID
-    //====================================
-
-    @(posedge rx_valid);
-
-    $display("RX Valid = %b", rx_valid);
-    $display("RX Data  = %h", rx_data_out);
-
-
-    //====================================
-    // CHECK RESULT
-    //====================================
-
-    if (rx_data_out == 8'hA5)
-        $display("TEST PASSED");
-    else
-        $display("TEST FAILED");
-
-    #100;
     $finish;
 end
+
+initial begin 
+	        $monitor("time=%0t, parity_en=%0d, parity_type=%0d, tx_start=%0d, tx_data=%0d, tx_busy=%0d, uart_tx=%0d, uart_rx=%0d, rx_data=%0c, rx_valid=%0d, rx_error=%0d", $time, parity_en, parity_type, tx_start, tx_data, tx_busy, uart_tx, uart_rx, rx_data, rx_valid, rx_error);
+end
+
+initial begin
+$dumpfile("uart.vcd");
+$dumpvars(0,uart_tb);
+end
+
 endmodule

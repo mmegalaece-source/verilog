@@ -1,124 +1,159 @@
-module tx #(
-    parameter CLK_FREQ = 50000000,
-    parameter BAUD_RATE = 9600
-)(
-    input clk,
-    input reset,
-    input ena,
-    input [7:0] data_in,
-    output reg tx,
-    output reg busy
-);
-localparam CLK_PER_BIT = CLK_FREQ / BAUD_RATE;
-parameter IDLE  = 2'b00;
-parameter START = 2'b01;
-parameter DATA  = 2'b10;
-parameter STOP  = 2'b11;
-reg [1:0] state, next_state;
-reg [3:0] bit_count;
-reg [7:0] shift_reg;
-reg [15:0] baud_count;
+module transmiter #(parameter integer clock = 50000000,baudrate = 115200)
+(input clk,
+input rst,
+input tx_start,
+input [7:0] tx_data,
+input parity_en,
+input parity_type,
+output reg tx,
+output reg tx_busy);
 
-always @(posedge clk or negedge reset) begin
-    if (!reset) begin
-        state      <= IDLE;
-        tx         <= 1'b1;
-        busy       <= 1'b0;
-        baud_count <= 16'd0;
-        bit_count  <= 4'd0;
-        shift_reg  <= 8'd0;
+localparam integer t_bit = (clock/baudrate);
+
+reg [2:0] state,next;
+reg [12:0] baudcount;
+reg [2:0] bitcount;
+reg [7:0] shift_reg;
+reg parity;
+
+localparam tx_idle=3'd0,tx__start=3'd1,tx__data=3'd2,tx_parity=3'd3,tx_stop=3'd4;
+
+always@(posedge clk or posedge rst) begin
+if(rst)
+state <= tx_idle;
+else 
+state <= next;
+end
+
+always @(posedge clk or posedge rst) begin
+
+    if (rst) begin
+        baudcount <= 0;
+        bitcount  <= 0;
+    end
+
+    else if (state == tx_idle) begin
+    	     baudcount <= 0;
+    	     bitcount <=0;
+	end
+    else begin
+          if (baudcount == t_bit-1) begin
+
+            baudcount <= 0;
+           
+	  if(state == tx__data)begin
+             if (bitcount < 3'd7)
+                bitcount <= bitcount + 1;
+	    end
+	  end
+	 else begin
+                baudcount <= baudcount +1;
+         end  
+	end
+    end
+
+always@(posedge clk or posedge rst) begin
+        if(rst)
+                parity <= 0;
+        else if(state == tx_idle && tx_start) begin
+                if(parity_en) begin
+                        if(parity_type)
+                                parity <= ~^tx_data;
+                        else
+                                parity <= ^tx_data;
+                end
+                else
+                        parity <= 0;
+        end
+end
+
+always@(posedge clk or posedge rst ) begin
+	if(rst)
+		shift_reg <= 0;
+	else begin
+		if (state == tx_idle && tx_start)
+    			shift_reg <= tx_data;
+		else if (baudcount == t_bit-1 && state == tx__data)
+    			shift_reg <= {tx_data[0],shift_reg[7:1]};
+	end	
+end
+
+always@(*) begin
+case(state)
+tx_idle: begin
+    tx = 1;
+    tx_busy = 0;
+
+    if (tx_start) begin
+        next = tx__start;
     end
     else begin
-        state <= next_state;
-        case (state)
-        IDLE: begin
-            tx         <= 1'b1;
-            busy       <= 1'b0;
-            baud_count <= 16'd0;
-            bit_count  <= 4'd0;
-            if (ena) begin
-                shift_reg <= data_in;
-                busy      <= 1'b1;
-            end
-        end
-
-	START: begin
-            tx   <= 1'b0;
-            busy <= 1'b1;
-            if (baud_count == CLK_PER_BIT - 1) begin
-                baud_count <= 16'd0;
-            end
-            else begin
-                baud_count <= baud_count + 1'b1;
-            end
-        end
-
-	DATA: begin
-            tx   <= shift_reg[bit_count];
-            busy <= 1'b1;
-            if (baud_count == CLK_PER_BIT - 1) begin
-                baud_count <= 16'd0;
-                if (bit_count == 4'd7) begin
-                    bit_count <= 4'd0;
-                end
-                else begin
-                    bit_count <= bit_count + 1'b1;
-                end
-            end
-            else begin
-                baud_count <= baud_count + 1'b1;
-            end
-        end
-
-	STOP: begin
-            tx   <= 1'b1;
-            busy <= 1'b1;
-            if (baud_count == CLK_PER_BIT - 1) begin
-                baud_count <= 16'd0;
-                busy       <= 1'b0;
-            end
-            else begin
-                baud_count <= baud_count + 1'b1;
-            end
-        end
-        default: begin
-            state <= IDLE;
-            tx    <= 1'b1;
-            busy  <= 1'b0;
-        end
-        endcase
+        next = tx_idle;
     end
 end
 
-always @(*) begin
-    next_state = state;
-    case (state)
-    IDLE: begin
-        if (ena)
-            next_state = START;
-    end
+tx__start: begin
+    tx = 0;
+    tx_busy = 1;
 
-    START: begin
-        if (baud_count == CLK_PER_BIT - 1)
-            next_state = DATA;
+    if (baudcount == t_bit-1) begin
+        next = tx__data;
     end
+    else begin
+        next = tx__start;
+    end
+end
 
-    DATA: begin
-        if (baud_count == CLK_PER_BIT - 1) begin
-            if (bit_count == 4'd7)
-                next_state = STOP;
+tx__data: begin
+
+    tx = shift_reg[0];
+    tx_busy = 1;
+
+    if (baudcount == t_bit-1) begin
+        if (bitcount == 4'd7) begin
+            if (parity_en)
+                next = tx_parity;
             else
-                next_state = DATA;
+                next = tx_stop;
         end
+        else begin
+            next = tx__data;
+        end
+
+    end
+    else begin
+        next = tx__data;
     end
 
-    STOP: begin
-        if (baud_count == CLK_PER_BIT - 1)
-            next_state = IDLE;
-    end
-    default: begin
-        next_state = IDLE;
-    end
-    endcase
 end
+
+tx_parity: begin
+        tx = parity;
+        tx_busy = 1;
+        
+        if(baudcount == t_bit-1)
+                next = tx_stop;
+        else
+                next = tx_parity;
+end
+
+tx_stop: begin
+		 tx = 1;
+    	tx_busy = 1;
+
+    if (baudcount == t_bit-1) begin
+        next = tx_idle;
+    end
+    else begin
+        next = tx_stop;
+    end
+end
+	default : begin
+		tx = 1;
+		tx_busy = 0;
+		next = tx_idle;
+	end
+ endcase
+end
+
 endmodule

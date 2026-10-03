@@ -1,38 +1,44 @@
-module topmodule #(
-    parameter CLK_FREQ  = 50000000,
-    parameter BAUD_RATE = 9600
-) (
-    input  wire clk,
-    input  wire reset,
-    output wire tx_pin,
-    input  wire rx_pin,
-    input  wire tx_start,
-    input  wire [7:0]  tx_data_in,
-    output wire tx_busy,
-    output wire [7:0]  rx_data_out,
-    output wire rx_valid
-);
+module uart #(parameter integer clock = 50000000,baudrate = 115200)
+(input clk,
+input rst,
+input uart_rx,
+output uart_tx,
+//transmitter
+input [7:0] tx_data,
+input tx_start,
+input parity_en,
+input parity_type,
+output tx_busy,
+//receiver
+output [7:0]rx_data,
+output rx_valid,
+output rx_error);
 
-tx #(
-    .CLK_FREQ  (CLK_FREQ),
-    .BAUD_RATE (BAUD_RATE)
-) u_tx (
-    .clk (clk),
-    .reset (reset),
-    .ena (tx_start),
-    .data_in (tx_data_in),
-    .tx (tx_pin),
-    .busy (tx_busy)
-);
+wire tx_internal;
 
-receiver #(
-    .CLK_FREQ  (CLK_FREQ),
-    .BAUD_RATE (BAUD_RATE)
-) receiver (
-    .clk       (clk),
-    .reset     (reset),
-    .rx        (rx_pin),
-    .data_out  (rx_data_out),
-    .rx_valid  (rx_valid)
-);
+
+transmiter #(.clock(clock),
+	      .baudrate(baudrate))
+uart_tx1(.clk(clk),
+	 .rst(rst),
+	 .tx_data(tx_data),
+	 .tx_start(tx_start),
+	 .parity_en(parity_en),
+     .parity_type(parity_type),
+	 .tx(tx_internal),
+	 .tx_busy(tx_busy));
+	
+receiver #(.clock(clock),
+	   .baudrate(baudrate))
+uart_rx1(.clk(clk),
+	 .rst(rst),
+	 .rx(uart_rx),
+     .parity_en(parity_en),
+     .parity_type(parity_type),
+	 .rx_data(rx_data),
+	 .rx_valid(rx_valid),
+	 .rx_error(rx_error));
+
+assign uart_tx = tx_internal;
+
 endmodule
