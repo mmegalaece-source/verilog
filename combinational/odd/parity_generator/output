@@ -1,0 +1,61 @@
+#! /usr/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/system.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/v2005_math.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/va_math.vpi";
+S_0x5b190c2639c0 .scope module, "odd_parity_generator_tb" "odd_parity_generator_tb" 2 1;
+ .timescale 0 0;
+v0x5b190c2774d0_0 .var "data", 3 0;
+v0x5b190c277590_0 .net "parity", 0 0, L_0x5b190c277c50;  1 drivers
+S_0x5b190c263b50 .scope module, "uut" "odd_parity_generator" 2 4, 3 1 0, S_0x5b190c2639c0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 4 "data";
+    .port_info 1 /OUTPUT 1 "parity";
+L_0x5b190c2777d0 .functor XOR 1, L_0x5b190c277660, L_0x5b190c277730, C4<0>, C4<0>;
+L_0x5b190c2779b0 .functor XOR 1, L_0x5b190c2777d0, L_0x5b190c277910, C4<0>, C4<0>;
+L_0x5b190c277b40 .functor XOR 1, L_0x5b190c2779b0, L_0x5b190c277a70, C4<0>, C4<0>;
+L_0x5b190c277c50 .functor NOT 1, L_0x5b190c277b40, C4<0>, C4<0>, C4<0>;
+v0x5b190c253c90_0 .net *"_ivl_1", 0 0, L_0x5b190c277660;  1 drivers
+v0x5b190c276d60_0 .net *"_ivl_11", 0 0, L_0x5b190c277a70;  1 drivers
+v0x5b190c276e40_0 .net *"_ivl_12", 0 0, L_0x5b190c277b40;  1 drivers
+v0x5b190c276f00_0 .net *"_ivl_3", 0 0, L_0x5b190c277730;  1 drivers
+v0x5b190c276fe0_0 .net *"_ivl_4", 0 0, L_0x5b190c2777d0;  1 drivers
+v0x5b190c277110_0 .net *"_ivl_7", 0 0, L_0x5b190c277910;  1 drivers
+v0x5b190c2771f0_0 .net *"_ivl_8", 0 0, L_0x5b190c2779b0;  1 drivers
+v0x5b190c2772d0_0 .net "data", 3 0, v0x5b190c2774d0_0;  1 drivers
+v0x5b190c2773b0_0 .net "parity", 0 0, L_0x5b190c277c50;  alias, 1 drivers
+L_0x5b190c277660 .part v0x5b190c2774d0_0, 3, 1;
+L_0x5b190c277730 .part v0x5b190c2774d0_0, 2, 1;
+L_0x5b190c277910 .part v0x5b190c2774d0_0, 1, 1;
+L_0x5b190c277a70 .part v0x5b190c2774d0_0, 0, 1;
+    .scope S_0x5b190c2639c0;
+T_0 ;
+    %vpi_call 2 9 "$monitor", "Time=%0t data=%b parity=%b", $time, v0x5b190c2774d0_0, v0x5b190c277590_0 {0 0 0};
+    %pushi/vec4 0, 0, 4;
+    %store/vec4 v0x5b190c2774d0_0, 0, 4;
+    %delay 10, 0;
+    %pushi/vec4 1, 0, 4;
+    %store/vec4 v0x5b190c2774d0_0, 0, 4;
+    %delay 10, 0;
+    %pushi/vec4 10, 0, 4;
+    %store/vec4 v0x5b190c2774d0_0, 0, 4;
+    %delay 10, 0;
+    %pushi/vec4 15, 0, 4;
+    %store/vec4 v0x5b190c2774d0_0, 0, 4;
+    %delay 10, 0;
+    %pushi/vec4 9, 0, 4;
+    %store/vec4 v0x5b190c2774d0_0, 0, 4;
+    %delay 10, 0;
+    %vpi_call 2 15 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "odd_parity_generator_tb.v";
+    "odd_parity_generator.v";
