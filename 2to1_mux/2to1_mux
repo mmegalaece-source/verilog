@@ -1,3 +1,0 @@
-module 2to1_mux(input d1,do,s,output y);
-assign y=(~do&s)|(d1&s);
-endmodule
