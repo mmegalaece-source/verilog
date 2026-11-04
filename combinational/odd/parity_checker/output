@@ -1,0 +1,76 @@
+#! /usr/bin/vvp
+:ivl_version "12.0 (stable)";
+:ivl_delay_selection "TYPICAL";
+:vpi_time_precision + 0;
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/system.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/vhdl_sys.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/vhdl_textio.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/v2005_math.vpi";
+:vpi_module "/usr/lib/x86_64-linux-gnu/ivl/va_math.vpi";
+S_0x626180c2ccf0 .scope module, "odd_parity_checker_tb" "odd_parity_checker_tb" 2 1;
+ .timescale 0 0;
+v0x626180c42120_0 .var "data", 3 0;
+v0x626180c421e0_0 .net "error", 0 0, L_0x626180c42ae0;  1 drivers
+v0x626180c422b0_0 .var "parity", 0 0;
+S_0x626180c2ce80 .scope module, "uut" "odd_parity_checker" 2 5, 3 1 0, S_0x626180c2ccf0;
+ .timescale 0 0;
+    .port_info 0 /INPUT 4 "data";
+    .port_info 1 /INPUT 1 "parity";
+    .port_info 2 /OUTPUT 1 "error";
+L_0x626180c42520 .functor XOR 1, L_0x626180c423b0, L_0x626180c42480, C4<0>, C4<0>;
+L_0x626180c42700 .functor XOR 1, L_0x626180c42520, L_0x626180c42660, C4<0>, C4<0>;
+L_0x626180c42890 .functor XOR 1, L_0x626180c42700, L_0x626180c427c0, C4<0>, C4<0>;
+L_0x626180c429a0 .functor XOR 1, L_0x626180c42890, v0x626180c422b0_0, C4<0>, C4<0>;
+L_0x626180c42ae0 .functor NOT 1, L_0x626180c429a0, C4<0>, C4<0>, C4<0>;
+v0x626180c1d730_0 .net *"_ivl_1", 0 0, L_0x626180c423b0;  1 drivers
+v0x626180c417f0_0 .net *"_ivl_11", 0 0, L_0x626180c427c0;  1 drivers
+v0x626180c418d0_0 .net *"_ivl_12", 0 0, L_0x626180c42890;  1 drivers
+v0x626180c41990_0 .net *"_ivl_14", 0 0, L_0x626180c429a0;  1 drivers
+v0x626180c41a70_0 .net *"_ivl_3", 0 0, L_0x626180c42480;  1 drivers
+v0x626180c41ba0_0 .net *"_ivl_4", 0 0, L_0x626180c42520;  1 drivers
+v0x626180c41c80_0 .net *"_ivl_7", 0 0, L_0x626180c42660;  1 drivers
+v0x626180c41d60_0 .net *"_ivl_8", 0 0, L_0x626180c42700;  1 drivers
+v0x626180c41e40_0 .net "data", 3 0, v0x626180c42120_0;  1 drivers
+v0x626180c41f20_0 .net "error", 0 0, L_0x626180c42ae0;  alias, 1 drivers
+v0x626180c41fe0_0 .net "parity", 0 0, v0x626180c422b0_0;  1 drivers
+L_0x626180c423b0 .part v0x626180c42120_0, 3, 1;
+L_0x626180c42480 .part v0x626180c42120_0, 2, 1;
+L_0x626180c42660 .part v0x626180c42120_0, 1, 1;
+L_0x626180c427c0 .part v0x626180c42120_0, 0, 1;
+    .scope S_0x626180c2ccf0;
+T_0 ;
+    %vpi_call 2 11 "$monitor", "Time=%0t data=%b parity=%b error=%b", $time, v0x626180c42120_0, v0x626180c422b0_0, v0x626180c421e0_0 {0 0 0};
+    %pushi/vec4 0, 0, 4;
+    %store/vec4 v0x626180c42120_0, 0, 4;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x626180c422b0_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 10, 0, 4;
+    %store/vec4 v0x626180c42120_0, 0, 4;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x626180c422b0_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 15, 0, 4;
+    %store/vec4 v0x626180c42120_0, 0, 4;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x626180c422b0_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 9, 0, 4;
+    %store/vec4 v0x626180c42120_0, 0, 4;
+    %pushi/vec4 1, 0, 1;
+    %store/vec4 v0x626180c422b0_0, 0, 1;
+    %delay 10, 0;
+    %pushi/vec4 10, 0, 4;
+    %store/vec4 v0x626180c42120_0, 0, 4;
+    %pushi/vec4 0, 0, 1;
+    %store/vec4 v0x626180c422b0_0, 0, 1;
+    %delay 10, 0;
+    %vpi_call 2 22 "$finish" {0 0 0};
+    %end;
+    .thread T_0;
+# The file index is used to find the file name in the following table.
+:file_names 4;
+    "N/A";
+    "<interactive>";
+    "odd_parity_checker_tb.v";
+    "odd_parity_checker.v";
