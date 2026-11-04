@@ -1,4 +1,0 @@
-module full_subtractordesign(input a,b,c,output d,b);
-assign d=a^b^c;
-assign b=(-a&b)|(~a&b)|(b&b);
-endmodule
